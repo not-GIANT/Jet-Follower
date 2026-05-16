@@ -17,7 +17,7 @@ import math, time, random
 CONFIG = {
     'canvas_size': 400,
     'bg_color': '#010203',
-    'max_particles': 40,
+    'max_particles': 60,
     'jet_scale': 1.0,
     'cursor_delay': 0.15, # Reduced delay for faster reaction
     'max_speed': 320.0,   # Slightly faster
@@ -316,14 +316,35 @@ class JetFollower:
         wx, wy = self.x - CX, self.y - CY
         for i, item in enumerate(self._part_items):
             if i < len(self.particles):
-                sx, sy, _, _, life, max_life = self.particles[i]
+                # Particle: [sx, sy, svx, svy, life, max_life, mode]
+                p = self.particles[i]
+                sx, sy, _, _, life, max_life = p[:6]
+                mode = p[6] if len(p) > 6 else 'smoke'
+                
                 px, py = sx - wx, sy - wy
-                r = 3.5 * (life / max_life)
-                self.cv.coords(item, px-r, py-r, px+r, py+r)
-                # Fade color: white -> grey
                 ratio = life / max_life
-                c_val = int(50 + 205 * ratio)
-                color = f'#{c_val:02x}{c_val:02x}{c_val:02x}'
+                
+                if mode == 'missile':
+                    # Blue tint: #64B5F6 -> #1565C0
+                    r = int(21 + (100 - 21) * ratio)
+                    g = int(101 + (181 - 101) * ratio)
+                    b = int(192 + (246 - 192) * ratio)
+                    color = f'#{r:02x}{g:02x}{b:02x}'
+                    radius = 4.0 * ratio
+                elif mode == 'spark':
+                    # Orange/Yellow: #FFFFFF -> #FF6D00
+                    r = 255
+                    g = int(109 + (255 - 109) * ratio)
+                    b = int(0 + (255 - 0) * ratio)
+                    color = f'#{r:02x}{g:02x}{b:02x}'
+                    radius = 2.0 * ratio
+                else: # 'smoke'
+                    # Grayscale: white -> grey
+                    c_val = int(50 + 205 * ratio)
+                    color = f'#{c_val:02x}{c_val:02x}{c_val:02x}'
+                    radius = 3.5 * ratio
+
+                self.cv.coords(item, px-radius, py-radius, px+radius, py+radius)
                 self.cv.itemconfig(item, fill=color, state='normal')
             else:
                 self.cv.itemconfig(item, state='hidden')
@@ -439,12 +460,14 @@ class JetFollower:
         # Update particles (WORLD space)
         new_particles = []
         for p in self.particles:
-            sx, sy, svx, svy, life, max_life = p
+            # p: [sx, sy, svx, svy, life, max_life, mode]
+            sx, sy, svx, svy, life, max_life = p[:6]
+            mode = p[6] if len(p) > 6 else 'smoke'
             life -= dt
             if life > 0:
                 sx += svx * dt
                 sy += svy * dt
-                new_particles.append([sx, sy, svx, svy, life, max_life])
+                new_particles.append([sx, sy, svx, svy, life, max_life, mode])
         self.particles = new_particles
 
         # Update bullets (WORLD space)
@@ -454,6 +477,13 @@ class JetFollower:
             dist_to_target = math.hypot(tx - sx, ty - sy)
             if dist_to_target < 20: # Impact!
                 self.impacts.append([tx, ty, CONFIG['impact_duration']])
+                # Spawn spark particles
+                for _ in range(random.randint(4, 6)):
+                    sang = random.uniform(0, 2*math.pi)
+                    spd = random.uniform(50, 150)
+                    self.particles.append([tx, ty, math.cos(sang)*spd, math.sin(sang)*spd, 
+                                          random.uniform(0.3, 0.6), 0.6, 'spark'])
+                    if len(self.particles) > MAX_PARTICLES: self.particles.pop(0)
             else:
                 sx += svx * dt
                 sy += svy * dt
@@ -489,7 +519,8 @@ class JetFollower:
             
             # Smoke trail for missile
             if random.random() < 0.5:
-                self.particles.append([sx, sy, -vx*0.2, -vy*0.2, 0.5, 0.5])
+                self.particles.append([sx, sy, -vx*0.2, -vy*0.2, 0.5, 0.5, 'missile'])
+                if len(self.particles) > MAX_PARTICLES: self.particles.pop(0)
             
             # Check impact
             if math.hypot(real_cx - sx, real_cy - sy) < 25:
@@ -614,7 +645,7 @@ class JetFollower:
                     self.particles.append([self.x + tx, self.y + ty, 
                                           random.uniform(-15, 15), 
                                           random.uniform(-15, 15), 
-                                          random.uniform(0.6, 1.2), 1.2])
+                                          random.uniform(0.6, 1.2), 1.2, 'smoke'])
                     if len(self.particles) > MAX_PARTICLES: self.particles.pop(0)
 
                 self._draw_jet(show_flame=True)
@@ -700,7 +731,7 @@ class JetFollower:
                 svy = -self.vy * 0.1 + random.uniform(-10, 10)
                 self.particles.append([self.x + tx, self.y + ty, 
                                       svx, svy, 
-                                      random.uniform(0.8, 1.5), 1.5])
+                                      random.uniform(0.8, 1.5), 1.5, 'smoke'])
                 if len(self.particles) > MAX_PARTICLES: self.particles.pop(0)
 
         self._draw_jet(show_flame=(self.speed > 20))
