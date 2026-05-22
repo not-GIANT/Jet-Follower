@@ -1,4 +1,4 @@
-<!-- BANNER -->
+![Banner](banner.svg)
 <div align="center">
 
 ```
