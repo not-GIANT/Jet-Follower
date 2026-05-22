@@ -1,15 +1,6 @@
-![Banner](banner.svg)
 <div align="center">
 
-```
-╔══════════════════════════════════════════════════════════╗
-║                                                          ║
-║        ✈  J E T   F O L L O W E R  ✈                    ║
-║                                                          ║
-║    PHYSICS-DRIVEN · MULTI-MONITOR · COMBAT AI            ║
-║                                                          ║
-╚══════════════════════════════════════════════════════════╝
-```
+![Jet Follower Banner](banner.svg)
 
 [![Python](https://img.shields.io/badge/Python-3.8%2B-blue?style=flat-square&logo=python&logoColor=white)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)](https://opensource.org/licenses/MIT)
@@ -19,7 +10,7 @@
 
 *A high-performance fighter jet that hunts your cursor — armed, dangerous, and physics-accurate.*
 
-[**⬇ Download .exe**](https://github.com/not-GIANT/Jet-Follower/releases/tag/Latest) · [**📖 Read the Docs**](#-installation) · [**⚙️ Configure**](#%EF%B8%8F-configuration)
+[**⬇ Download .exe**](https://github.com/not-GIANT/Jet-Follower/releases/tag/Latest) · [**📖 Installation**](#-installation) · [**⚙️ Configure**](#%EF%B8%8F-configuration)
 
 </div>
 
@@ -27,7 +18,7 @@
 
 ## What Is This?
 
-Jet Follower is a `tkinter`-based desktop toy that renders a fully animated fighter jet that chases your cursor across the screen — including across multiple monitors. Under the hood it runs a real physics simulation: velocity LERPing, angular momentum, afterburner states, and an autonomous dual-weapon combat system that fires at your cursor without mercy.
+Jet Follower is a `tkinter`-based desktop toy that renders a fully animated fighter jet chasing your cursor across the screen — including across multiple monitors. Under the hood it runs a real physics simulation: velocity LERPing, angular momentum, afterburner states, and an autonomous dual-weapon combat system that fires at your cursor without mercy.
 
 > **This is not a simple "follow the mouse" widget.** It's a miniature flight simulator with a weapons loadout.
 
@@ -48,19 +39,12 @@ Jet Follower is a `tkinter`-based desktop toy that renders a fully animated figh
 
 The jet **proactively attacks your cursor** — it's not just following you, it's hunting you.
 
-```
-┌─────────────────────────────────────────────────────┐
-│  WEAPON 1 — Tracer Burst                            │
-│  Fires 25-bullet rapid bursts with motion-blur      │
-│  trails. High velocity, tight spread.               │
-├─────────────────────────────────────────────────────┤
-│  WEAPON 2 — Homing Missiles                         │
-│  Dual missiles with real-time pathfinding.          │
-│  They will find your cursor. Eventually.            │
-└─────────────────────────────────────────────────────┘
-```
+| Weapon | Behavior |
+|---|---|
+| **Tracer Burst** | Rapid-fire 25-bullet bursts with high-speed motion-blur trails |
+| **Homing Missiles** | Dual missiles with real-time pathfinding — they *will* find your cursor |
 
-Both weapons trigger **impact effects**: micro-explosions for bullet hits, multi-point heavy explosions for missile impacts.
+Both weapons trigger **impact effects**: micro-explosions for bullets, multi-point heavy explosions for missile impacts.
 
 ### 🎨 Visual Effects
 
@@ -86,7 +70,7 @@ Both weapons trigger **impact effects**: micro-explosions for bullet hits, multi
 
 ### Option B — Run from Source
 
-**Prerequisites:** Python 3.8+ with `tkinter` (included in standard Python installs on Windows)
+**Prerequisites:** Python 3.8+ with `tkinter` (bundled with standard Python on Windows)
 
 ```bash
 # Clone the repo
@@ -108,7 +92,7 @@ Or double-click `Run Jet.bat` if you prefer.
 | **Move mouse** | Jet tracks your cursor with physics delay |
 | **ESC** | Close the application |
 | **Middle click** | Close the application |
-| *(automatic)* | If the jet catches the cursor and explodes — it auto-respawns from a random edge |
+| *(automatic)* | Jet auto-respawns from a random screen edge after exploding |
 
 ---
 
@@ -123,17 +107,16 @@ CONFIG = {
     "shoot_dist":        300,    # Range at which weapons engage
     "missile_turn_spd":  0.06,   # Missile tracking aggression (higher = sharper turns)
     "explosion_chance":  0.4,    # Probability of exploding on cursor contact
-    # ... and many more
 }
 ```
 
 | Parameter | Effect |
 |---|---|
-| `cursor_delay` | Higher = more sluggish, cinematic feel. Lower = razor-sharp tracking. |
-| `max_speed` | How fast the jet can move at full afterburner |
-| `shoot_dist` | Increase for a more aggressive, trigger-happy jet |
-| `missile_turn_spd` | Raise for heat-seeker missiles; lower for lazy arcs |
-| `explosion_chance` | Set to `1.0` if you want every cursor-catch to be fatal |
+| `cursor_delay` | Higher = cinematic lag. Lower = razor-sharp tracking. |
+| `max_speed` | How fast the jet moves at full afterburner |
+| `shoot_dist` | Increase for a more aggressive jet |
+| `missile_turn_spd` | Raise for heat-seeker accuracy; lower for lazy arcs |
+| `explosion_chance` | Set to `1.0` for guaranteed destruction on cursor-catch |
 
 ---
 
@@ -141,7 +124,7 @@ CONFIG = {
 
 ```
 Jet-Follower/
-├── jet_follower.py      ← Main simulation — all physics, rendering, weapons
+├── jet_follower.py      ← Main simulation — physics, rendering, weapons
 ├── Run Jet.bat          ← Windows launcher shortcut
 ├── Jet Follower.exe     ← Pre-compiled Windows binary
 ├── icon.png             ← Application icon
@@ -154,17 +137,17 @@ Jet-Follower/
 
 - **Python 3** — Core language
 - **tkinter** — Rendering and window management (no external dependencies)
-- **Pure math** — All physics computed from scratch (no game engine, no library)
+- **Pure math** — All physics computed from scratch; no game engine or libraries
 
 ---
 
-## 🗺️ Roadmap Ideas
+## 🗺️ Roadmap
 
-- [ ] Sound effects (engine roar, weapon fire, explosions)
+- [ ] Sound effects (engine roar, weapons fire, explosions)
 - [ ] Configurable jet skin / color scheme
-- [ ] Scoreboard — how long can you dodge?
+- [ ] Survival mode — how long can you dodge?
 - [ ] Linux / macOS support
-- [ ] Multiple jets at once
+- [ ] Multiple jets simultaneously
 
 ---
 
@@ -174,6 +157,6 @@ Jet-Follower/
 
 *Developed with ❤️ by [**GIANT**](https://github.com/not-GIANT)*
 
-*If it made you smile, consider leaving a ⭐*
+*If it made you smile, drop a ⭐*
 
 </div>
