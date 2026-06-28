@@ -141,16 +141,6 @@ Jet-Follower/
 
 ---
 
-## 🗺️ Roadmap
-
-- [ ] Sound effects (engine roar, weapons fire, explosions)
-- [ ] Configurable jet skin / color scheme
-- [ ] Survival mode — how long can you dodge?
-- [ ] Linux / macOS support
-- [ ] Multiple jets simultaneously
-
----
-
 <div align="center">
 
 ---
